@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Extended Stylish Form with Validation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff7eb3, #65c7f7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+      width: 380px;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #65c7f7;
+      outline: none;
+    }
+
+    .error {
+      color: red;
+      font-size: 12px;
+      margin-top: 3px;
+      display: none;
+    }
+
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 12px;
+      background: #65c7f7;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #4aa3d8;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container">
+    <h2>Register</h2>
+    <form id="registerForm" novalidate>
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" placeholder="Enter your name">
+      <div class="error" id="nameError">Name is required</div>
+
+      <label for="username">Username:</label>
+      <input type="text" id="username" placeholder="Choose a username">
+      <div class="error" id="usernameError">Username must be at least 3 characters and contain no spaces</div>
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" placeholder="Enter your email">
+      <div class="error" id="emailError">Enter a valid email</div>
+
+      <label for="phone">Phone Number:</label>
+      <input type="text" id="phone" placeholder="Enter your phone number">
+      <div class="error" id="phoneError">Enter a valid 10-digit phone number</div>
+
+      <label for="gender">Gender:</label>
+      <select id="gender">
+        <option value="">Select Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+      </select>
+      <div class="error" id="genderError">Please select your gender</div>
+
+      <label for="password">Password:</label>
+      <input type="password" id="password" placeholder="Enter your password">
+      <div class="error" id="passwordError">Password must be at least 6 characters</div>
+
+      <label for="confirmPassword">Confirm Password:</label>
+      <input type="password" id="confirmPassword" placeholder="Confirm your password">
+      <div class="error" id="confirmPasswordError">Passwords do not match</div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("registerForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      let name = document.getElementById("name").value.trim();
+      let username = document.getElementById("username").value.trim();
+      let email = document.getElementById("email").value.trim();
+      let phone = document.getElementById("phone").value.trim();
+      let gender = document.getElementById("gender").value;
+      let password = document.getElementById("password").value.trim();
+      let confirmPassword = document.getElementById("confirmPassword").value.trim();
+
+      let valid = true;
+
+      let nameError = document.getElementById("nameError");
+      let usernameError = document.getElementById("usernameError");
+      let emailError = document.getElementById("emailError");
+      let phoneError = document.getElementById("phoneError");
+      let genderError = document.getElementById("genderError");
+      let passwordError = document.getElementById("passwordError");
+      let confirmPasswordError = document.getElementById("confirmPasswordError");
+
+      // Name
+      nameError.style.display = name === "" ? "block" : "none";
+      if (name === "") valid = false;
+
+      // Username
+      if (username.length < 3 || username.includes(" ")) {
+        usernameError.style.display = "block";
+        valid = false;
+      } else {
+        usernameError.style.display = "none";
+      }
+
+      // Email
+      let emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+      if (!email.match(emailPattern)) {
+        emailError.style.display = "block";
+        valid = false;
+      } else {
+        emailError.style.display = "none";
+      }
+
+      // Phone
+      let phonePattern = /^[0-9]{10}$/;
+      if (!phone.match(phonePattern)) {
+        phoneError.style.display = "block";
+        valid = false;
+      } else {
+        phoneError.style.display = "none";
+      }
+
+      // Gender
+      genderError.style.display = gender === "" ? "block" : "none";
+      if (gender === "") valid = false;
+
+      // Password
+      if (password.length < 6) {
+        passwordError.style.display = "block";
+        valid = false;
+      } else {
+        passwordError.style.display = "none";
+      }
+
+      // Confirm Password
+      if (confirmPassword !== password || confirmPassword === "") {
+        confirmPasswordError.style.display = "block";
+        valid = false;
+      } else {
+        confirmPasswordError.style.display = "none";
+      }
+
+      if (valid) {
+        alert("Form submitted successfully!");
+        document.getElementById("registerForm").reset();
+      }
+    });
+  </script>
+
+</body>
+</html>
